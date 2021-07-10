@@ -1,104 +1,71 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Net.Sockets;
 using System.Net;
+using System.Text;
 
-namespace ExampleTcpListener_Console
+namespace RemoteServer
 {
-    class ExampleTcpListener
+    class Program
     {
+        private Dictionary<string, string> LP;
+
         static void Main(string[] args)
         {
-            TcpListener server = null;
-            try
+            var httpListener = new HttpListener();
+            httpListener.Prefixes.Add("http://localhost:8714/");
+            httpListener.Start();
+
+            while (true)
             {
-                // Определим нужное максимальное количество потоков
-                // Пусть будет по 4 на каждый процессор
-                int MaxThreadsCount = Environment.ProcessorCount * 4;
-                Console.WriteLine("MaxThreadsCount = " + MaxThreadsCount.ToString());
-                // Установим максимальное количество рабочих потоков
-                ThreadPool.SetMaxThreads(MaxThreadsCount, MaxThreadsCount);
-                // Установим минимальное количество рабочих потоков
-                ThreadPool.SetMinThreads(2, 2);
-
-
-                // Устанавливаем порт для TcpListener = 9595.
-                Int32 port = 9595;
-                IPAddress localAddr = IPAddress.Parse("127.0.0.1");
-                int counter = 0;
-                server = new TcpListener(IPAddress.Any, port);
-
-                // Запускаем TcpListener и начинаем слушать клиентов.
-                server.Start();
-
-                // Принимаем клиентов в бесконечном цикле.
-                while (true)
+                var requestContext = httpListener.GetContext();
+                var request = requestContext.Request;
+                requestContext.Response.StatusCode = 200; //OK
+                var text = "";
+                var stream = requestContext.Response.OutputStream;
+                switch (request.HttpMethod)
                 {
-
-                    Console.Write("\nWaiting for a connection... ");
-
-                    // При появлении клиента добавляем в очередь потоков его обработку.
-                    ThreadPool.QueueUserWorkItem(ObrabotkaZaprosa, server.AcceptTcpClient());
-                    // Выводим информацию о подключении.
-                    counter++;
-                    Console.Write("\nConnection №" + counter.ToString() + "!");
-
+                    case "GET":
+                        {
+                            text = "Get Request";
+                            break;
+                        }
+                    case "POST":
+                        {
+                            var a = request.ContentEncoding;
+                            text = "Post Request";
+                            break;
+                        }
+                    case "PUT":
+                        {
+                            text = "Put Request";
+                            break;
+                        }
+                    case "DELETE":
+                        {
+                            text = "Delete Request";
+                            break;
+                        }
+                    case "PATH":
+                        {
+                            text = "Path Request";
+                            break;
+                        }
+                    default:
+                        {
+                            text = "Nothing";
+                            break;
+                        }
                 }
+                var bytes = Encoding.UTF8.GetBytes(text);
+                stream.Write(bytes, 0, bytes.Length);
+                requestContext.Response.Close();
             }
-            catch (SocketException e)
-            {
-                //В случае ошибки, выводим что это за ошибка.
-                Console.WriteLine("SocketException: {0}", e);
-            }
-            finally
-            {
-                // Останавливаем TcpListener.
-                server.Stop();
-            }
-
-
-            Console.WriteLine("\nHit enter to continue...");
-            Console.Read();
-        }
-
-        static void ObrabotkaZaprosa(object client_obj)
-        {
-            // Буфер для принимаемых данных.
-            Byte[] bytes = new Byte[256];
-            String data = null;
-
-            //Можно раскомментировать Thread.Sleep(1000); 
-            //Запустить несколько клиентов
-            //и наглядно увидеть как они обрабатываются в очереди. 
-            //Thread.Sleep(1000);
-
-            TcpClient client = client_obj as TcpClient;
-
-            data = null;
-
-            // Получаем информацию от клиента
-            NetworkStream stream = client.GetStream();
-
-            int i;
-
-            // Принимаем данные от клиента в цикле пока не дойдём до конца.
-            while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
-            {
-                // Преобразуем данные в ASCII string.
-                data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
-
-                // Преобразуем строку к верхнему регистру.
-                data = data.ToUpper();
-
-                // Преобразуем полученную строку в массив Байт.
-                byte[] msg = System.Text.Encoding.ASCII.GetBytes(data);
-
-                // Отправляем данные обратно клиенту (ответ).
-                stream.Write(msg, 0, msg.Length);
-
-            }
-            // Закрываем соединение.
-            client.Close();
+            
+            httpListener.Stop();
+            httpListener.Close();
+            System.Console.WriteLine(HttpListener.IsSupported);
         }
     }
 }
