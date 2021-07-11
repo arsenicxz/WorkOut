@@ -4,6 +4,7 @@ using System.Threading;
 using System.Net.Sockets;
 using System.Net;
 using System.Text;
+using System.IO;
 
 namespace RemoteServer
 {
@@ -33,7 +34,10 @@ namespace RemoteServer
                         }
                     case "POST":
                         {
-                            var a = request.ContentEncoding;
+                            var body = request.InputStream;
+                            var reader = new StreamReader(body,request.ContentEncoding);
+                            var a = reader.ReadToEnd();
+                            System.Console.WriteLine(a);
                             text = "Post Request";
                             break;
                         }
