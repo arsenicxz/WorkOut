@@ -118,7 +118,7 @@ namespace RemoteServer
                 }
             }
 
-            if (subs[0].Contains("autorization"))
+            if (subs[0].Contains("authorization"))
             {
                 string login = subs[1].Split('=')[1];
                 string password = subs[2].Split('=')[1];
