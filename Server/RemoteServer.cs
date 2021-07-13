@@ -142,6 +142,7 @@ namespace RemoteServer
                 Place newPlace = new Place(name, adress, maxCount);
                 newPlace.Id = places.Count;
                 places.Add(newPlace);
+                return "success";
             }
 
             if (subs[0].Contains("tryToStart"))
