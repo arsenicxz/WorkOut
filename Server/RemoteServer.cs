@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace RemoteServer
 {
@@ -10,7 +12,7 @@ namespace RemoteServer
     {
         public string Login = "";
         public string Password = "";
-        public float Id;
+        public int Id;
 
         public User(string _login, string _password)
         {
@@ -24,6 +26,7 @@ namespace RemoteServer
         public string Name = "";
         public string Adress = "";
         public int MaxUsers = 0;
+        public int Id = 0;
         public List<User> UsersOnPlace = new List<User>();
         public List<User> UsersINQueue = new List<User>();
 
@@ -131,7 +134,80 @@ namespace RemoteServer
                 }
             }
 
+            if (subs[0].Contains("placeGenerating"))
+            {
+                string name = subs[1].Split('=')[1];
+                string adress = subs[2].Split('=')[1];
+                int maxCount = Int32.Parse(subs[3].Split('=')[1]);
+                Place newPlace = new Place(name, adress, maxCount);
+                newPlace.Id = places.Count;
+                places.Add(newPlace);
+            }
+
+            if (subs[0].Contains("tryToStart"))
+            {
+                int userId = Int32.Parse(subs[1].Split('=')[1]);
+                int placeId = Int32.Parse(subs[2].Split('=')[1]);
+                if(places[placeId].MaxUsers<= places[placeId].UsersOnPlace.Count)
+                {
+                    return "alreadyMax";
+                }
+                else
+                {
+                    return "canStart";
+                }
+            }
+
+            if (subs[0].Contains("start"))
+            {
+                int userId = Int32.Parse(subs[1].Split('=')[1]);
+                int placeId = Int32.Parse(subs[2].Split('=')[1]);
+                if (places[placeId].MaxUsers <= places[placeId].UsersOnPlace.Count)
+                {
+                    return "alreadyMax";
+                }
+                else
+                {
+                    AddUserInPlace(userId, placeId);
+                    return "success";
+                }
+            }
+
+            if (subs[0].Contains("goToQueue"))
+            {
+                int userId = Int32.Parse(subs[1].Split('=')[1]);
+                int placeId = Int32.Parse(subs[2].Split('=')[1]);
+                places[placeId].UsersINQueue.Add(users[userId]);
+                return "success "+(places[placeId].UsersINQueue.Count-1);
+            }
+
             return "unfinded mod";
+        }
+
+        private void AddUserInPlace(int userId, int placeId)
+        {
+            places[placeId].UsersOnPlace.Add(users[userId]);
+            Wait30Min(users[userId], placeId);
+        }
+
+        private async void Wait30Min(User user, int placeId)
+        {
+            await Task.Run(() => Thread.Sleep(1000 * 60 * 30));
+            places[placeId].UsersOnPlace.Remove(user);
+            RefreshPlace(placeId);
+        }
+
+        private void RefreshPlace(int placeId)
+        {
+            if(places[placeId].UsersINQueue.Count != 0)
+            {
+                int n = places[placeId].MaxUsers - places[placeId].UsersOnPlace.Count;
+                for(int i = 0; i < n; i++)
+                {
+                    AddUserInPlace(places[placeId].UsersINQueue[i].Id,placeId);
+                    //отправить сообщение что теперь вы не в очереди
+                }
+            }
         }
     }
 
