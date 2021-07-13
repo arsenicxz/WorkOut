@@ -63,6 +63,7 @@ namespace RemoteServer
                 var request = requestContext.Request;
 
                 requestContext.Response.StatusCode = 200; //OK
+                requestContext.Response.AddHeader("Access-Control-Allow-Origin", "*");
                 var text = "";
                 var stream = requestContext.Response.OutputStream;
                 switch (request.HttpMethod)
