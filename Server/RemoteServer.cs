@@ -191,7 +191,7 @@ namespace RemoteServer
                 {
                     if(places[placeId].UsersINQueue[i] == users[userId])
                     {
-                        return "youAre " + i;
+                        return i.ToString();
                     }
                 }
 
