@@ -115,7 +115,7 @@ namespace RemoteServer
                     newUser.Id = users.Count;
                     users.Add(newUser);
                     usersData.Add(login, newUser);
-                    return "success id="+(newUser.Id);
+                    return newUser.Id.ToString();
                 }
             }
 
@@ -127,7 +127,7 @@ namespace RemoteServer
                 {
                     
                     User currentUser = usersData[login];
-                    return "succes id=" + currentUser.Id;
+                    return currentUser.Id.ToString();
                 }
                 else
                 {
