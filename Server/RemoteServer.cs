@@ -205,6 +205,20 @@ namespace RemoteServer
                 return "error";
             }
 
+            if (subs[0].Contains("checkMyTime"))
+            {
+                int userId = Int32.Parse(subs[1].Split('=')[1]);
+                int placeId = Int32.Parse(subs[2].Split('=')[1]);
+                for (int i = 0; i < places[placeId].UsersOnPlace.Count; i++)
+                {
+                    if (places[placeId].UsersOnPlace[i] == users[userId])
+                    {
+                        return "youCanStay";
+                    }
+                }
+                return "goOut";
+            }
+
             return "unfinded mod";
         }
 
