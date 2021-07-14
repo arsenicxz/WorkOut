@@ -13,6 +13,7 @@ namespace RemoteServer
         public string Login = "";
         public string Password = "";
         public int Id;
+        public bool isAdmin = false;
 
         public User(string _login, string _password)
         {
@@ -53,6 +54,11 @@ namespace RemoteServer
 
         public void Run()
         {
+            User admin = new User("admin@gmail.com", "admin");
+            admin.Id = users.Count;
+            admin.isAdmin = true;
+            users.Add(admin);
+            usersData.Add("admin@gmail.com", admin);
             var httpListener = new HttpListener();
             httpListener.Prefixes.Add("http://localhost:8714/");
             httpListener.Start();
@@ -217,6 +223,23 @@ namespace RemoteServer
                     }
                 }
                 return "goOut";
+            }
+
+            if (subs[0].Contains("isAdmin"))
+            {
+                int userId = Int32.Parse(subs[1].Split('=')[1]);
+                if (userId >= users.Count)
+                {
+                    return "idNotFound"
+                }
+                if (users[userId].isAdmin == true)
+                {
+                    return "Y";
+                }
+                else
+                {
+                    return "N";
+                }
             }
 
             return "unfinded mod";
