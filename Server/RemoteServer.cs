@@ -183,6 +183,28 @@ namespace RemoteServer
                 return "success "+(places[placeId].UsersINQueue.Count-1);
             }
 
+            if (subs[0].Contains("checkPlaceInQueue"))
+            {
+                int userId = Int32.Parse(subs[1].Split('=')[1]);
+                int placeId = Int32.Parse(subs[2].Split('=')[1]);
+                for(int i = 0; i < places[placeId].UsersINQueue.Count;i++)
+                {
+                    if(places[placeId].UsersINQueue[i] == users[userId])
+                    {
+                        return "youAre " + i;
+                    }
+                }
+
+                for (int i = 0; i < places[placeId].UsersOnPlace.Count;i++)
+                {
+                    if (places[placeId].UsersOnPlace[i] == users[userId])
+                    {
+                        return "youAreOnPlace";
+                    }
+                }
+                return "error";
+            }
+
             return "unfinded mod";
         }
 
@@ -207,7 +229,6 @@ namespace RemoteServer
                 for(int i = 0; i < n; i++)
                 {
                     AddUserInPlace(places[placeId].UsersINQueue[i].Id,placeId);
-                    //отправить сообщение что теперь вы не в очереди
                 }
             }
         }
