@@ -154,16 +154,24 @@ namespace RemoteServer
 
             if (subs[0].Contains("tryToStart"))
             {
-                int userId = Int32.Parse(subs[1].Split('=')[1]);
-                int placeId = Int32.Parse(subs[2].Split('=')[1]);
-                if(places[placeId].MaxUsers<= places[placeId].UsersOnPlace.Count)
+                try
                 {
-                    return "alreadyMax";
+                    int userId = Int32.Parse(subs[1].Split('=')[1]);
+                    int placeId = Int32.Parse(subs[2].Split('=')[1]);
+                    if (places[placeId].MaxUsers <= places[placeId].UsersOnPlace.Count)
+                    {
+                        return "alreadyMax";
+                    }
+                    else
+                    {
+                        return "canStart";
+                    }
                 }
-                else
+                catch
                 {
-                    return "canStart";
+                    return "error";
                 }
+                
             }
 
             if (subs[0].Contains("start"))
