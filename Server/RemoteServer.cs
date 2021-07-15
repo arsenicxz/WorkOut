@@ -288,8 +288,8 @@ namespace RemoteServer
 
         private void Wait30Min(User user, int placeId)
         {
-            //await Task.Run(() => Thread.Sleep(1000 * 60 * 30));
-            Task.Run(() => Thread.Sleep(1000 * 30));
+            //Task.Run(() => Thread.Sleep(1000 * 60 * 30));
+            Thread.Sleep(1000 * 30);
             places[placeId].UsersOnPlace.Remove(user);
             RefreshPlace(placeId);
         }
