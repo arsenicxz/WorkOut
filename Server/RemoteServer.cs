@@ -58,6 +58,11 @@ namespace RemoteServer
             admin.Id = users.Count;
             admin.isAdmin = true;
             users.Add(admin);
+
+            Place place = new Place("gym", "prospect", 5);
+            place.Id = places.Count;
+            places.Add(place);
+
             usersData.Add("admin@gmail.com", admin);
             var httpListener = new HttpListener();
             httpListener.Prefixes.Add("http://localhost:8714/");
