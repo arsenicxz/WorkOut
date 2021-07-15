@@ -196,10 +196,17 @@ namespace RemoteServer
 
             if (subs[0].Contains("goToQueue"))
             {
-                int userId = Int32.Parse(subs[1].Split('=')[1]);
-                int placeId = Int32.Parse(subs[2].Split('=')[1]);
-                places[placeId].UsersINQueue.Add(users[userId]);
-                return "success "+(places[placeId].UsersINQueue.Count-1);
+                try
+                {
+                    int userId = Int32.Parse(subs[1].Split('=')[1]);
+                    int placeId = Int32.Parse(subs[2].Split('=')[1]);
+                    places[placeId].UsersINQueue.Add(users[userId]);
+                    return (places[placeId].UsersINQueue.Count - 1).ToString();
+                }
+                catch
+                {
+                    return "error";
+                }
             }
 
             if (subs[0].Contains("checkPlaceInQueue"))
