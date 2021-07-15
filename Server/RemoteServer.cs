@@ -209,6 +209,21 @@ namespace RemoteServer
                 }
             }
 
+            if (subs[0].Contains("exitFromQueue"))
+            {
+                try
+                {
+                    int userId = Int32.Parse(subs[1].Split('=')[1]);
+                    int placeId = Int32.Parse(subs[2].Split('=')[1]);
+                    places[placeId].UsersINQueue.Remove(users[userId]);
+                    return "succes";
+                }
+                catch
+                {
+                    return "error";
+                }
+            }
+
             if (subs[0].Contains("checkPlaceInQueue"))
             {
                 int userId = Int32.Parse(subs[1].Split('=')[1]);
