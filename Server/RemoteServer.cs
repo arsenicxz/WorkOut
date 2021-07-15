@@ -227,19 +227,19 @@ namespace RemoteServer
 
             if (subs[0].Contains("isAdmin"))
             {
-                string userId = subs[1].Split('=')[1];
-                //if (userId >= users.Count)
-                //{
-                //    return "idNotFound";
-                //}
-                //if (users[userId].isAdmin == true)
-                //{
-                //    return "Y";
-                //}
-                //else
-                //{
-                //    return "N";
-                //}
+                int userId = Int32.Parse(subs[1].Split('=')[1]);
+                if (userId >= users.Count)
+                {
+                    return "idNotFound";
+                }
+                if (users[userId].isAdmin == true)
+                {
+                    return "Y";
+                }
+                else
+                {
+                    return "N";
+                }
             }
 
             return "unfinded mod";
