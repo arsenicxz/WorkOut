@@ -280,16 +280,16 @@ namespace RemoteServer
             return "unfinded mod";
         }
 
-        private void AddUserInPlace(int userId, int placeId)
+        private async void AddUserInPlace(int userId, int placeId)
         {
             places[placeId].UsersOnPlace.Add(users[userId]);
-            Wait30Min(users[userId], placeId);
+            await Task.Run(() => Wait30Min(users[userId], placeId));
         }
 
-        private async void Wait30Min(User user, int placeId)
+        private void Wait30Min(User user, int placeId)
         {
             //await Task.Run(() => Thread.Sleep(1000 * 60 * 30));
-            await Task.Run(() => Thread.Sleep(1000 * 30));
+            Task.Run(() => Thread.Sleep(1000 * 30));
             places[placeId].UsersOnPlace.Remove(user);
             RefreshPlace(placeId);
         }
