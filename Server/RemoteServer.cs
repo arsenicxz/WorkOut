@@ -230,7 +230,7 @@ namespace RemoteServer
                 int userId = Int32.Parse(subs[1].Split('=')[1]);
                 if (userId >= users.Count)
                 {
-                    return "idNotFound"
+                    return "idNotFound";
                 }
                 if (users[userId].isAdmin == true)
                 {
