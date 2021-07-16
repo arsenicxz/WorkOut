@@ -201,7 +201,7 @@ namespace RemoteServer
                     int userId = Int32.Parse(subs[1].Split('=')[1]);
                     int placeId = Int32.Parse(subs[2].Split('=')[1]);
                     places[placeId].UsersINQueue.Add(users[userId]);
-                    return (places[placeId].UsersINQueue.Count - 1).ToString();
+                    return (places[placeId].UsersINQueue.Count).ToString();
                 }
                 catch
                 {
