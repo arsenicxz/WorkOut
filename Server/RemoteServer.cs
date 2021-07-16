@@ -248,7 +248,7 @@ namespace RemoteServer
                 {
                     if(places[placeId].UsersINQueue[i] == users[userId])
                     {
-                        return i.ToString();
+                        return (i+1).ToString();
                     }
                 }
 
