@@ -1,0 +1,84 @@
+import { StatusBar } from 'expo-status-bar';
+import React from 'react';
+import { Button, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
+
+export default function App() {
+  return (
+    <View style={styles.container}>
+      <View style={styles.logoContainer}>
+        <Text style={styles.textLogo}>воркаут.очередь</Text>
+        <Text>Безопасно и честно</Text>
+      </View>
+      <View style={styles.contentContainer}>
+        {/* <View style={styles.button}>
+          <Button
+            title="Войти"
+            color="blue"
+          />
+        </View>
+        <View style={styles.button}>
+          <Button
+            title="Зарегистрироваться"
+            color="grey"
+          />
+        </View> */}
+
+        <TouchableHighlight 
+              style={styles.btn}
+              underlayColor='#fff'
+              >
+          <Text style={styles.textButton}>Войти</Text>
+        </TouchableHighlight>
+        <TouchableHighlight 
+              style={styles.btn}
+              underlayColor='#fff'>
+          <Text style={styles.textButton}>Зарегистрироваться</Text>
+        </TouchableHighlight>
+        
+      </View>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    //alignItems: 'center',
+    //justifyContent: 'center',
+  },
+  logoContainer: {
+    flex: 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    //backgroundColor: 'black',
+  },
+  contentContainer: {
+    flex: 3,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  textLogo: {
+    fontSize: 24,
+  },
+  textButton:{
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "white",
+  },
+  button:{
+    paddingVertical: 10,
+    width: "75%",
+    borderRadius: 25,
+  },
+  btn:{
+    width: "75%",
+    paddingTop: 20,
+    paddingBottom: 20,
+    backgroundColor: '#0094FF',
+    borderRadius: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 5,
+  }
+});
